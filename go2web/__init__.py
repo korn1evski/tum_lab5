@@ -46,6 +46,15 @@ class HTTPClient:
                 'content': content
             }, f)
 
+    def _format_json(self, json_data, indent=2):
+        """Format JSON data in a human-readable way"""
+        if isinstance(json_data, dict):
+            return json.dumps(json_data, indent=indent)
+        elif isinstance(json_data, list):
+            return json.dumps(json_data, indent=indent)
+        else:
+            return str(json_data)
+
     def get(self, url):
         # Check cache first
         cached_content = self._get_cached_response(url)
@@ -115,7 +124,23 @@ class HTTPClient:
                     redirect_url = urljoin(url, redirect_url)
                 return self.get(redirect_url)
 
-        # Parse HTML and extract text
+        # Check Content-Type header
+        content_type = re.search(r"Content-Type: (.+?)(?:\r\n|$)", headers)
+        if content_type:
+            content_type = content_type.group(1).lower()
+            
+            # Handle JSON responses
+            if 'application/json' in content_type:
+                try:
+                    json_data = json.loads(body)
+                    formatted_json = self._format_json(json_data)
+                    # Cache the response
+                    self._cache_response(url, formatted_json)
+                    return formatted_json
+                except json.JSONDecodeError:
+                    return "Error: Invalid JSON response"
+
+        # Handle HTML responses (default)
         soup = BeautifulSoup(body, 'html.parser')
         
         for element in soup(['script', 'style', 'nav', 'header', 'footer', 'noscript', 'iframe', 'form', 'button', 'input', 'select', 'textarea', 'meta', 'link', 'aside', 'menu', 'menuitem', 'dialog', 'dialog', 'details', 'summary', 'figure', 'figcaption', 'picture', 'source', 'track', 'video', 'audio', 'embed', 'object', 'param', 'canvas', 'svg', 'math', 'map', 'area', 'optgroup', 'option', 'fieldset', 'legend', 'label', 'datalist', 'output', 'progress', 'meter', 'time', 'mark', 'ruby', 'rt', 'rp', 'bdi', 'bdo', 'wbr', 'slot', 'template', 'portal']):
