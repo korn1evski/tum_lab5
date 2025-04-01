@@ -1,0 +1,9 @@
+README.md
+setup.py
+go2web/__init__.py
+go2web.egg-info/PKG-INFO
+go2web.egg-info/SOURCES.txt
+go2web.egg-info/dependency_links.txt
+go2web.egg-info/entry_points.txt
+go2web.egg-info/requires.txt
+go2web.egg-info/top_level.txt
