@@ -13,6 +13,16 @@ A simple command-line web client that can make HTTP requests and perform web sea
 
 ## Installation
 
+You can install go2web in two ways:
+
+### Method 1: Using pip (Recommended)
+
+```bash
+pip install .
+```
+
+### Method 2: Manual Installation
+
 1. Clone this repository:
 
 ```bash
@@ -62,6 +72,17 @@ go2web -s "python programming"
 go2web -h
 ```
 
+## Project Structure
+
+```
+go2web/
+├── go2web/              # Main package directory
+├── setup.py            # Package configuration
+├── requirements.txt    # Project dependencies
+├── Makefile           # Build and installation scripts
+└── README.md          # This file
+```
+
 ## Implementation Details
 
 - The program implements its own HTTP client using raw sockets
@@ -70,6 +91,7 @@ go2web -h
 - Caches responses for 1 hour in `~/.go2web_cache`
 - Uses BeautifulSoup4 for HTML parsing
 - Supports content negotiation for HTML and JSON responses
+- Package-based structure for better maintainability
 
 ## Uninstallation
 
@@ -82,5 +104,5 @@ sudo make clean
 ## Requirements
 
 - Python 3.6+
-- beautifulsoup4
-- argparse
+- beautifulsoup4==4.12.3
+- argparse==1.4.0
